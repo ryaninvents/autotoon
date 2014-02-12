@@ -1,2 +1,2 @@
 #!/bin/bash
-scala -cp bin:lib/opencv-248.jar -Djava.library.path=lib Test
+scala -cp bin:lib/opencv-248.jar -Djava.library.path=lib org.autotoon.Autotoon

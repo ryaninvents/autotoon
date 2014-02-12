@@ -1,7 +1,8 @@
 all: test
 
-test: src/io/muller/test
-	scalac -classpath lib/opencv-248.jar -d bin src/io/muller/test/*.scala
+test:
+	mkdir -p bin
+	scalac -classpath lib/opencv-248.jar -d bin src/org/autotoon/*.scala
 
 clean:
 	rm -rf bin/*
