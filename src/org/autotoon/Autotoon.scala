@@ -7,6 +7,7 @@ import org.opencv.imgproc.Imgproc._
 import java.awt.image.BufferedImage
 import java.awt.Graphics
 import javax.swing._
+import java.util
 
 
 class Autotoon extends JPanel{
@@ -25,12 +26,12 @@ class Autotoon extends JPanel{
     val blurred = new Mat()
     val lines = new Mat()
     val liteLines = new Mat()
-    val solid = new Mat(new Size(image.size.width,image.size.height), ddepth, new Scalar(255))
     val gradX = new Mat()
     val gradY = new Mat()
     val absGradX = new Mat()
     val absGradY = new Mat()
-    GaussianBlur(image,blurred,new Size(3,3),1)
+    val blur = 5
+    GaussianBlur(image,blurred,new Size(blur,blur),1)
     cvtColor(image,gray,COLOR_RGB2GRAY)
     Sobel(gray,gradX,ddepth,1,0,1,scale,delta,BORDER_DEFAULT)
     Core.convertScaleAbs(gradX,absGradX)
@@ -60,6 +61,7 @@ object Autotoon{
     var absGradX = new Mat()
     var absGradY = new Mat()
     val ddepth = CvType.CV_16S
+    val blur = 5
     val scale = 1
     val delta = 0
     if(!cap.isOpened){
@@ -77,11 +79,11 @@ object Autotoon{
     }
     cap.grab()
     cap.retrieve(image)
-    GaussianBlur(image,blurred,new Size(3,3),0)
+    GaussianBlur(image,blurred,new Size(blur,blur),0)
     cvtColor(image,gray,COLOR_RGB2GRAY)
-    Sobel(gray,gradX,ddepth,1,0,3,scale,delta,BORDER_DEFAULT)
+    Sobel(gray,gradX,ddepth,1,0,7,scale,delta,BORDER_DEFAULT)
     Core.convertScaleAbs(gradX,absGradX)
-    Sobel(gray,gradY,ddepth,1,0,3,scale,delta,BORDER_DEFAULT)
+    Sobel(gray,gradY,ddepth,1,0,7,scale,delta,BORDER_DEFAULT)
     Core.convertScaleAbs(gradY,absGradY)
     Core.addWeighted(absGradX,0.5,absGradY,0.5,0,lines)
     Highgui.imwrite("/home/parallels/test.png",lines)
@@ -98,6 +100,8 @@ object Autotoon{
     frame.setVisible(true)
     val pic=new Mat()
     val capture = new VideoCapture(0)
+    capture.set(Highgui.CV_CAP_PROP_FRAME_WIDTH,1024)
+    capture.set(Highgui.CV_CAP_PROP_FRAME_HEIGHT,768)
     if( capture.isOpened)
     {
       while( true )
